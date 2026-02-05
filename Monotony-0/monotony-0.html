@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cozy Cat & Blocks</title>
+    <style>
+        :root {
+            --bg-color: #fdf6ec;
+            --cat-color: #eee5d8;
+            --cat-shadow: #dccbb5;
+            --cat-fur: #fff;
+            --accent-pink: #ffb7b2;
+            --block-1: #b5ead7;
+            --block-2: #c7ceea;
+            --block-3: #ffdac1;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: 'Segoe UI', sans-serif;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+        }
+
+        /* --- THE CAT --- */
+        .cat-wrapper {
+            position: absolute;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 180px;
+            z-index: 10;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .cat-body {
+            position: absolute;
+            bottom: 0;
+            width: 140px;
+            height: 90px;
+            background: var(--cat-color);
+            border-radius: 60px 60px 40px 40px;
+            left: 30px;
+            box-shadow: inset -10px -5px var(--cat-shadow);
+            animation: breathe 4s infinite ease-in-out;
+        }
+
+        .cat-head {
+            position: absolute;
+            top: 20px;
+            left: 10px;
+            width: 100px;
+            height: 90px;
+            background: var(--cat-color);
+            border-radius: 50%;
+            box-shadow: inset -5px -5px var(--cat-shadow);
+            z-index: 20;
+            transform-origin: center bottom;
+            animation: head-tilt 6s infinite ease-in-out alternate;
+        }
+
+        .ear {
+            position: absolute;
+            top: -15px;
+            width: 30px;
+            height: 40px;
+            background: var(--cat-color);
+            border-radius: 20px 20px 0 0;
+        }
+        .ear.left { left: 10px; transform: rotate(-20deg); }
+        .ear.right { right: 10px; transform: rotate(20deg); }
+        .ear-inner {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 20px;
+            height: 30px;
+            background: var(--accent-pink);
+            border-radius: 15px 15px 0 0;
+            opacity: 0.6;
+        }
+
+        .face {
+            position: relative;
+            top: 40px;
+            text-align: center;
+        }
+
+        .eyes {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .eye {
+            width: 10px;
+            height: 10px;
+            background: #4a4a4a;
+            border-radius: 50%;
+            animation: blink 4s infinite;
+        }
+
+        .eye.happy {
+            background: transparent;
+            height: 8px;
+            width: 12px;
+            border-top: 3px solid #4a4a4a;
+            border-radius: 50% 50% 0 0;
+            animation: none;
+            display: none; /* Hidden by default */
+        }
+
+        .nose {
+            width: 8px;
+            height: 6px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+            margin: 5px auto 0;
+        }
+
+        .mouth {
+            width: 12px;
+            height: 5px;
+            border-bottom: 2px solid #4a4a4a;
+            border-radius: 0 0 10px 10px;
+            margin: 0 auto;
+            opacity: 0.5;
+        }
+
+        .paw {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: var(--cat-fur);
+            border-radius: 50%;
+            bottom: -5px;
+            z-index: 25;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+        .paw.left { 
+            left: 50px; 
+            animation: bat-block 3s infinite ease-in-out;
+        }
+        .paw.right { right: 50px; }
+
+        .tail {
+            position: absolute;
+            right: -20px;
+            bottom: 20px;
+            width: 80px;
+            height: 20px;
+            background: var(--cat-color);
+            border-radius: 20px;
+            transform-origin: left center;
+            animation: tail-wag 3s infinite ease-in-out alternate;
+            z-index: 5;
+        }
+
+        /* --- BLOCKS --- */
+        .blocks {
+            position: absolute;
+            bottom: 20%;
+            left: 30%;
+            z-index: 30;
+        }
+
+        .block {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            box-shadow: 2px 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .block-1 {
+            background: var(--block-1);
+            transform: rotate(-10deg);
+            bottom: 0;
+            left: 0;
+        }
+        .block-2 {
+            background: var(--block-2);
+            transform: rotate(5deg);
+            bottom: 40px;
+            left: 5px;
+            animation: wobble 3s infinite ease-in-out;
+        }
+        .block-3 {
+            background: var(--block-3);
+            width: 30px;
+            height: 30px;
+            bottom: 5px;
+            left: 50px;
+            transform: rotate(15deg);
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes breathe {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(1.03); }
+        }
+
+        @keyframes head-tilt {
+            0% { transform: rotate(0deg); }
+            30% { transform: rotate(-5deg); }
+            70% { transform: rotate(5deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        @keyframes blink {
+            0%, 48%, 52%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.1); }
+        }
+
+        @keyframes tail-wag {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(20deg); }
+        }
+
+        @keyframes bat-block {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px) translateX(5px); }
+        }
+
+        @keyframes wobble {
+            0%, 100% { transform: rotate(5deg); }
+            50% { transform: rotate(0deg) translateX(2px); }
+        }
+
+        /* --- INTERACTION STATES --- */
+        .cat-wrapper.loving {
+            transform: translateX(-50%) scale(1.05);
+        }
+        
+        /* Happy Eyes Toggle */
+        .cat-wrapper.loving .eye.normal { display: none; }
+        .cat-wrapper.loving .eye.happy { display: block; }
+        
+        /* Stop batting when loving */
+        .cat-wrapper.loving .paw.left { animation: none; transform: translateY(-5px); }
+
+        /* --- PARTICLES --- */
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff6b6b;
+            transform: rotate(45deg);
+            pointer-events: none;
+            animation: floatUp 1.5s ease-out forwards;
+            z-index: 100;
+        }
+        .heart::before, .heart::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ff6b6b;
+        }
+        .heart::before { left: -10px; }
+        .heart::after { top: -10px; }
+
+        @keyframes floatUp {
+            0% { transform: rotate(45deg) translateY(0) scale(0); opacity: 0; }
+            20% { transform: rotate(45deg) translateY(-20px) scale(1); opacity: 1; }
+            100% { transform: rotate(45deg) translateY(-100px) scale(0.5); opacity: 0; }
+        }
+
+        .instruction {
+            position: absolute;
+            bottom: 50px;
+            color: #998a7b;
+            font-size: 14px;
+            letter-spacing: 1px;
+            opacity: 0.7;
+            animation: fadein 2s;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="blocks">
+            <div class="block block-1"></div>
+            <div class="block block-2"></div>
+            <div class="block block-3"></div>
+        </div>
+
+        <div class="cat-wrapper" id="cat">
+            <div class="tail"></div>
+            <div class="cat-body"></div>
+            <div class="cat-head">
+                <div class="ear left"><div class="ear-inner"></div></div>
+                <div class="ear right"><div class="ear-inner"></div></div>
+                <div class="face">
+                    <div class="eyes">
+                        <div class="eye normal"></div>
+                        <div class="eye happy"></div>
+                        <div class="eye normal"></div>
+                        <div class="eye happy"></div>
+                    </div>
+                    <div class="nose"></div>
+                    <div class="mouth"></div>
+                </div>
+            </div>
+            <div class="paw left"></div>
+            <div class="paw right"></div>
+        </div>
+    </div>
+
+    <div class="instruction">Tap the kitty to show love</div>
+
+    <script>
+        const cat = document.getElementById('cat');
+        const body = document.querySelector('body');
+
+        // Function to create a heart
+        function createHeart(x, y) {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            
+            // Randomize slight position offset
+            const offsetX = (Math.random() - 0.5) * 40;
+            const offsetY = (Math.random() - 0.5) * 40;
+            
+            heart.style.left = (x + offsetX) + 'px';
+            heart.style.top = (y + offsetY) + 'px';
+            
+            // Randomize color slightly
+            const colors = ['#ffb7b2', '#ff9aa2', '#ffdac1'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            heart.style.background = randomColor;
+            
+            // We need to inject the pseudo-element colors via css variable or just use inline style on the main block for simplicity in this demo, 
+            // but for the pseudo-elements to change color via JS is tricky. 
+            // So we will stick to the default pink defined in CSS for simplicity, or we can use SVG hearts.
+            // Let's stick to CSS hearts for performance.
+
+            body.appendChild(heart);
+
+            // Remove heart after animation
+            setTimeout(() => {
+                heart.remove();
+            }, 1500);
+        }
+
+        // Interaction Handler
+        function handleInteraction(e) {
+            // Get click/touch coordinates
+            const x = e.clientX || e.touches[0].clientX;
+            const y = e.clientY || e.touches[0].clientY;
+
+            // Trigger visual "Love Mode"
+            cat.classList.add('loving');
+            
+            // Create multiple hearts
+            createHeart(x, y - 50);
+            setTimeout(() => createHeart(x - 20, y - 80), 100);
+            setTimeout(() => createHeart(x + 20, y - 70), 200);
+
+            // Reset cat expression after a delay
+            clearTimeout(cat.timer);
+            cat.timer = setTimeout(() => {
+                cat.classList.remove('loving');
+            }, 2000);
+        }
+
+        // Add Listeners
+        document.addEventListener('click', handleInteraction);
+        document.addEventListener('touchstart', handleInteraction);
+    </script>
+</body>
+</html>

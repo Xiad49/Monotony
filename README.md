@@ -58,4 +58,4 @@ Thank you for visiting, and welcome to a world of creative breaks!
 
 ### Connect with me
 
-For any questions or collaborations, feel free to reach out via [Your Contact Information].
+For any questions or collaborations, feel free to reach out via [xiad79@gmail.com].
